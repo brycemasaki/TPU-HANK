@@ -1,5 +1,4 @@
-#!/usr/bin/env python3
-# Fixed version: Persistent TPU shock HARK IRF simulation
+# Persistent TPU shock HARK IRF simulation
 
 from __future__ import annotations
 import copy
