@@ -15,9 +15,9 @@ import random
 from pandas_datareader.data import DataReader
 from HARK.ConsumptionSaving.ConsIndShockModel import IndShockConsumerType
 
-# ---------------------------------------------------------------------
+
 # 0. Helpers
-# ---------------------------------------------------------------------
+
 def broadcast_path(x, T: int):
     if np.isscalar(x):
         return [[x]] * T
@@ -28,9 +28,9 @@ def broadcast_path(x, T: int):
         return [[float(z)] for z in x]
     raise TypeError("Unsupported type for broadcast_path")
 
-# ---------------------------------------------------------------------
+
 # 1. EPU shock scale from FRED
-# ---------------------------------------------------------------------
+
 SERIES = "EPUTRADE"
 START, END = "1985-01-01", "2025-04-30"
 print("Pulling EPUTRADE series from FRED ...")
@@ -38,9 +38,9 @@ log_epu = np.log(DataReader(SERIES, "fred", START, END)[SERIES].dropna())
 sigma_epu = log_epu.std(ddof=0)
 print(f"σ(log EPUTRADE) = {sigma_epu:.4f}")
 
-# ---------------------------------------------------------------------
+
 # 2. Calibration
-# ---------------------------------------------------------------------
+
 CRRA, Beta = 2.0, 0.988
 Nagents = 30000
 PermShkStd = 0.06
@@ -88,9 +88,9 @@ A0 = np.mean(agent.history['aNrm'][-1])
 assert A0 > 1e-6, "Mean assets ≈0 -- check calibration."
 print(f"Steady-state aggregates: C0 = {C0:.4f}   A0 = {A0:.4f}")
 
-# ---------------------------------------------------------------------
+
 # 3. Run IRF
-# ---------------------------------------------------------------------
+
 def run_tpu_irf(k_sigma=1.0,
                 horizon: int = IRF_HORIZON,
                 persistence: float = 0.05):
@@ -128,9 +128,9 @@ def run_tpu_irf(k_sigma=1.0,
     print(f"[DEBUG] Markov: σ_e(0) = {tran_path[0]:.4f}, u(0) = {unemp_path[0]:.4f}, mean aNrm(0) = {a[0]:.4f}")
     return c, a
 
-# ---------------------------------------------------------------------
+
 # 4. Run and export
-# ---------------------------------------------------------------------
+
 print("Running impulse responses ...")
 c1, a1 = run_tpu_irf(1.0)
 c2, a2 = run_tpu_irf(2.0)
